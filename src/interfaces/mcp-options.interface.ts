@@ -38,4 +38,5 @@ export interface McpOptions {
      */
     statelessMode?: boolean;
   };
+  moduleId?: string;
 }

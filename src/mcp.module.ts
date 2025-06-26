@@ -14,6 +14,7 @@ let instanceIdCounter = 0;
 @Module({
   imports: [DiscoveryModule],
   providers: [McpRegistryService, McpExecutorService],
+  exports: [McpRegistryService],
 })
 export class McpModule {
   /**
@@ -42,6 +43,7 @@ export class McpModule {
         pingEnabled: true,
         pingIntervalMs: 30000,
       },
+      moduleId: undefined,
     };
     const mergedOptions = { ...defaultOptions, ...options } as McpOptions;
     mergedOptions.sseEndpoint = normalizeEndpoint(mergedOptions.sseEndpoint);
@@ -50,7 +52,8 @@ export class McpModule {
     );
     mergedOptions.mcpEndpoint = normalizeEndpoint(mergedOptions.mcpEndpoint);
 
-    const moduleId = `mcp-module-${instanceIdCounter++}`;
+    const moduleId =
+      mergedOptions.moduleId ?? `mcp-module-${instanceIdCounter++}`;
     const providers = this.createProvidersFromOptions(mergedOptions, moduleId);
     const controllers = this.createControllersFromOptions(mergedOptions);
     return {
